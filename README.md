@@ -13,15 +13,36 @@ wallet-repo/
 ├── index.html          # Landing / marketing page (Hindi)
 ├── wallet.html         # Dashboard — send / receive / reward / history
 ├── css/
-│   └── styles.css      # All styles (CSS variables, glassmorphism, responsive)
+│   └── styles.css      # All styles (CSS variables, zone gradients, animations)
 ├── js/
 │   ├── wallet-core.js  # ⚙️ Business logic — ledger, validation, idempotency
 │   ├── wallet.js       # 🎛️ Dashboard UI bindings (forms, panels, render)
 │   └── app.js          # 🏠 Homepage bindings (preview, smooth scroll)
 ├── assets/
-│   └── favicon.svg     # Inline SVG favicon (no external icon font)
-└── .nojekyll           # GitHub Pages: serve as static (skip Jekyll)
+│   ├── favicon.svg     # Inline SVG favicon (no external icon font)
+│   └── illustrations.svg # unDraw-style flat SVG illustrations (one per zone)
+├── .github/workflows/
+│   └── deploy-pages.yml # GitHub Pages auto-deploy (Actions)
+├── setup-github.sh     # Helper script to push to a new GitHub repo
+├── .nojekyll           # GitHub Pages: serve as static (skip Jekyll)
+└── .gitignore          # Secrets, node_modules, local DB patterns
 ```
+
+### 🎨 Color zones
+
+हर functional area का अपना distinct color identity — सब कुछ एक ही रंग नहीं:
+
+| Zone | Primary | Accent | कहाँ |
+|---|---|---|---|
+| Hero / Brand | 🟣 `#8b5cf6` | `#6c8cff` | Topbar, brand, balance card |
+| Send (भेजें) | 🔴 `#ef4444` | `#f97316` | Send action, send panel, debit txs |
+| Receive (प्राप्त) | 🟢 `#10b981` | `#22d3ee` | Receive action, receive panel, credit txs |
+| Reward (रिवॉर्ड) | 🟡 `#f59e0b` | `#fbbf24` | Reward action, reward panel |
+| History (इतिहास) | 🩵 `#06b6d4` | `#3b82f6` | History action, history panel |
+| Security (सुरक्षा) | 🟦 `#6366f1` | `#a78bfa` | Security section |
+
+Zone color हर जगह propagate होता है — icon gradient, panel accent line, panel
+tint, form focus ring, और submit button।
 
 ### Layer separation
 - **Frontend (`index.html`, `wallet.html`, `css/`, `assets/`)** — pure presentation।
@@ -74,11 +95,14 @@ npx serve -p 8080 .
 
 ### Option C — Deploy to GitHub Pages
 1. Push to GitHub: `git init && git add . && git commit -m "init" && git remote add origin <url> && git push -u origin main`
-2. Repo Settings → Pages → Source: `main` branch, `/` root
+2. Repo Settings → Pages → Source: `GitHub Actions` (ya `main` branch, `/` root)
 3. URL: `https://<username>.github.io/<repo>/`
 
 > The included `.nojekyll` file tells GitHub Pages to serve the repo as static files
 > without Jekyll preprocessing (important — otherwise files starting with `_` get ignored).
+> The `.github/workflows/deploy-pages.yml` workflow auto-publishes on every push to `main`.
+
+> **Live demo:** https://avnishct138.github.io/wallet/
 
 ---
 
