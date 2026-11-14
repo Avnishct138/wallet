@@ -95,14 +95,15 @@ npx serve -p 8080 .
 
 ### Option C — Deploy to GitHub Pages
 1. Push to GitHub: `git init && git add . && git commit -m "init" && git remote add origin <url> && git push -u origin main`
-2. Repo Settings → Pages → Source: `GitHub Actions` (ya `main` branch, `/` root)
-3. URL: `https://<username>.github.io/<repo>/`
+2. Repo **Settings → Pages → Build and deployment → Source: `Deploy from a branch`** → branch `main`, folder `/ (root)`
+3. Save → 1-2 minutes में live: **https://avnishct138.github.io/wallet/**
 
 > The included `.nojekyll` file tells GitHub Pages to serve the repo as static files
 > without Jekyll preprocessing (important — otherwise files starting with `_` get ignored).
-> The `.github/workflows/deploy-pages.yml` workflow auto-publishes on every push to `main`.
-
-> **Live demo:** https://avnishct138.github.io/wallet/
+> This project is pure static — no build step required.
+>
+> Want auto-deploy on every push instead? Add `.github/workflows/deploy-pages.yml`
+> (standard `actions/deploy-pages@v4` workflow) and set Pages Source → `GitHub Actions`.
 
 ---
 
