@@ -1,0 +1,52 @@
+# ---- OS / editor cruft ----------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ---- Node (if you add tooling later) --------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- Build outputs --------------------------------------------
+dist/
+build/
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+
+# ---- Secrets & credentials (NEVER commit) ---------------------
+# Anything matching these patterns is ignored. Use environment
+# variables or a secrets manager in production.
+.env
+.env.*
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+credentials/
+config/local.json
+
+# ---- Logs ----------------------------------------------------
+*.log
+logs/
+
+# ---- Coverage / test artifacts -------------------------------
+coverage/
+.nyc_output/
+
+# ---- Wallet local data (DO NOT commit user ledger) -----------
+# The demo writes user data to localStorage in-browser only,
+# but if you add file-based dev storage, keep it out of git.
+data/
+*.sqlite
+*.db

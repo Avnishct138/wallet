@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Secure Wallet — Send, receive और transaction history" />
+  <title>वॉलेट — डैशबोर्ड | Secure Wallet</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- TOAST -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- SVG SPRITE -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-wallet" viewBox="0 0 24 24"><path fill="currentColor" d="M21 7H5a1 1 0 0 1 0-2h14V3H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1Zm-2 8h-3a2 2 0 1 1 0-4h3v4Z"/></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path fill="currentColor" d="m3.4 20.6 17.45-7.48a1 1 0 0 0 0-1.84L3.4 3.81a1 1 0 0 0-1.39 1.21L4.5 12l-2.49 6.98a1 1 0 0 0 1.39 1.62Z"/></symbol>
+      <symbol id="i-receive" viewBox="0 0 24 24"><path fill="currentColor" d="M5 4h14v3h-2V6H7v12h4v2H5V4Zm9.5 6.6L12.6 8.7 11.2 10.1l2.3 2.3-2.3 2.3 1.4 1.4 1.9-1.9 1.9 1.9 1.4-1.4-2.3-2.3 2.3-2.3-1.4-1.4-1.9 1.9Z"/></symbol>
+      <symbol id="i-history" viewBox="0 0 24 24"><path fill="currentColor" d="M13 3a9 9 0 0 0-9 9H1l4 4 4-4H6a7 7 0 1 1 2.05 4.95l-1.42 1.42A9 9 0 1 0 13 3Zm-1 5v5l4.25 2.52.75-1.23L13.5 12.25V8H12Z"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5Z"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4Z"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 4 5v7c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm-1 14-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9l-7 7Z"/></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4 4 12h5v8h6v-8h5L12 4Z"/></symbol>
+      <symbol id="i-arrow-down" viewBox="0 0 24 24"><path fill="currentColor" d="M12 20l8-8h-5V4H9v8H4l8 8Z"/></symbol>
+      <symbol id="i-logo" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 2 7v6c0 5 4 9 10 9s10-4 10-9V7L12 2Zm0 4.2 6.5 3.2V13c0 3.5-2.7 6.6-6.5 7.7C8.2 19.6 5.5 16.5 5.5 13V9.4L12 6.2Z"/></symbol>
+
+      <!-- Zone illustrations (used inside action buttons) -->
+      <symbol id="illus-send" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="55" fill="rgba(239,68,68,0.12)"/>
+        <g transform="translate(30,30)">
+          <path d="M5 30 L55 5 L45 55 L25 35 Z" fill="#ef4444"/>
+          <path d="M25 35 L45 55 L30 40 Z" fill="#f97316"/>
+          <path d="M5 30 L25 35 L20 25 Z" fill="#fbbf24"/>
+        </g>
+      </symbol>
+      <symbol id="illus-receive" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="55" fill="rgba(16,185,129,0.12)"/>
+        <rect x="25" y="40" width="70" height="50" rx="6" fill="none" stroke="#10b981" stroke-width="3"/>
+        <path d="M25 40 L60 70 L95 40" fill="none" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="60" cy="22" r="10" fill="#22d3ee"/>
+        <text x="60" y="27" text-anchor="middle" fill="#fff" font-size="11" font-weight="700" font-family="Inter, sans-serif">₹</text>
+      </symbol>
+      <symbol id="illus-reward" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="55" fill="rgba(245,158,11,0.12)"/>
+        <rect x="30" y="55" width="60" height="40" rx="4" fill="#f59e0b"/>
+        <rect x="28" y="50" width="64" height="12" rx="3" fill="#fbbf24"/>
+        <rect x="55" y="50" width="10" height="45" fill="#ef4444"/>
+        <rect x="28" y="56" width="64" height="6" fill="#ef4444"/>
+        <ellipse cx="50" cy="48" rx="8" ry="6" fill="#ef4444"/>
+        <ellipse cx="70" cy="48" rx="8" ry="6" fill="#ef4444"/>
+        <circle cx="60" cy="48" r="4" fill="#dc2626"/>
+      </symbol>
+      <symbol id="illus-history" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="55" fill="rgba(6,182,212,0.12)"/>
+        <circle cx="60" cy="60" r="30" fill="none" stroke="#06b6d4" stroke-width="3"/>
+        <line x1="60" y1="60" x2="60" y2="42" stroke="#06b6d4" stroke-width="3" stroke-linecap="round"/>
+        <line x1="60" y1="60" x2="74" y2="60" stroke="#06b6d4" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="60" cy="60" r="3" fill="#06b6d4"/>
+      </symbol>
+
+      <!-- Empty state illustration -->
+      <symbol id="illus-empty" viewBox="0 0 200 160">
+        <ellipse cx="100" cy="140" rx="70" ry="6" fill="#1a1f3a"/>
+        <rect x="40" y="40" width="120" height="80" rx="8" fill="#1a1f3a" stroke="#2a3050" stroke-width="1.5"/>
+        <line x1="55" y1="60" x2="120" y2="60" stroke="#3a3f5a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="55" y1="75" x2="100" y2="75" stroke="#3a3f5a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="55" y1="90" x2="110" y2="90" stroke="#3a3f5a" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="135" cy="100" r="14" fill="none" stroke="#06b6d4" stroke-width="3"/>
+        <line x1="146" y1="111" x2="156" y2="121" stroke="#06b6d4" stroke-width="3" stroke-linecap="round"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <svg class="ico brand-ico"><use href="#i-logo"/></svg>
+      <span>वॉलेट</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">होम</a>
+      <a href="wallet.html" class="active">वॉलेट</a>
+      <a href="index.html#security">सुरक्षा</a>
+    </nav>
+    <div class="user-chip">
+      <svg class="ico"><use href="#i-user"/></svg>
+      <span id="user-label">डेमो उपयोगकर्ता</span>
+    </div>
+  </header>
+
+  <main class="dash">
+    <!-- BALANCE CARD -->
+    <section class="balance-card">
+      <div class="card-top">
+        <div>
+          <div class="muted">उपलब्ध शेष</div>
+          <div class="balance" id="balance">₹0.00</div>
+        </div>
+        <svg class="ico card-chip"><use href="#i-wallet"/></svg>
+      </div>
+      <div class="meta-row">
+        <div>
+          <div class="muted">वॉलेट आईडी</div>
+          <div class="mono small" id="wallet-id">—</div>
+        </div>
+        <div>
+          <div class="muted">लेन-देन गिनती</div>
+          <div class="mono small" id="tx-count">0</div>
+        </div>
+        <div>
+          <div class="muted">सत्र</div>
+          <div class="mono small" id="session-id">—</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTIONS (zone-colored) -->
+    <section class="actions">
+      <button class="action zone-send" data-action="send">
+        <svg class="ico action-ico"><use href="#illus-send"/></svg>
+        <span>भेजें</span>
+      </button>
+      <button class="action zone-receive" data-action="receive">
+        <svg class="ico action-ico"><use href="#illus-receive"/></svg>
+        <span>प्राप्त करें</span>
+      </button>
+      <button class="action zone-reward" data-action="reward">
+        <svg class="ico action-ico"><use href="#illus-reward"/></svg>
+        <span>रिवॉर्ड</span>
+      </button>
+      <button class="action zone-history" data-action="history">
+        <svg class="ico action-ico"><use href="#illus-history"/></svg>
+        <span>इतिहास</span>
+      </button>
+    </section>
+
+    <!-- PANELS -->
+    <section class="panels">
+      <!-- SEND PANEL -->
+      <article class="panel zone-send" id="panel-send" hidden>
+        <header class="panel-head">
+          <h3><svg class="ico"><use href="#illus-send"/></svg> पैसे भेजें</h3>
+          <button class="icon-btn" data-close><svg class="ico"><use href="#i-x"/></svg></button>
+        </header>
+        <form id="send-form" class="form">
+          <label>
+            <span>प्राप्तकर्ता वॉलेट आईडी</span>
+            <input type="text" id="recv-id" placeholder="WLT-XXXXXXXX" required />
+          </label>
+          <label>
+            <span>राशि (₹)</span>
+            <input type="number" id="send-amt" min="1" max="50000" step="0.01" required />
+          </label>
+          <label>
+            <span>कारण / विवरण</span>
+            <input type="text" id="send-reason" maxlength="120" placeholder="जैसे: भोजन, किराया" required />
+          </label>
+          <label>
+            <span>Idempotency कुंजी (वैकल्पिक)</span>
+            <input type="text" id="send-idem" placeholder="खाली छोड़ें — ऑटो जनरेट होगी" />
+          </label>
+          <div class="form-foot">
+            <button type="button" class="btn-ghost" data-close>रद्द करें</button>
+            <button type="submit" class="btn-primary">भेजें</button>
+          </div>
+        </form>
+      </article>
+
+      <!-- RECEIVE PANEL -->
+      <article class="panel zone-receive" id="panel-receive" hidden>
+        <header class="panel-head">
+          <h3><svg class="ico"><use href="#illus-receive"/></svg> पैसे प्राप्त करें</h3>
+          <button class="icon-btn" data-close><svg class="ico"><use href="#i-x"/></svg></button>
+        </header>
+        <div class="form">
+          <p class="muted">
+            अपना वॉलेट आईडी साझा करें। प्राप्त राशि ऑटो-क्रेडिट होगी (डेमो में —
+            असली बैकएंड होने पर server-side ledger के माध्यम से)।
+          </p>
+          <div class="receive-box">
+            <div class="muted">आपका वॉलेट आईडी</div>
+            <div class="mono big" id="my-wallet-id">—</div>
+          </div>
+          <form id="receive-form" class="form">
+            <label>
+              <span>टेस्ट क्रेडिट राशि (₹)</span>
+              <input type="number" id="rec-amt" min="1" max="10000" step="0.01" required />
+            </label>
+            <label>
+              <span>स्रोत / कारण</span>
+              <input type="text" id="rec-reason" placeholder="जैसे: वेतन, रिफंड" required />
+            </label>
+            <div class="form-foot">
+              <button type="submit" class="btn-primary">क्रेडिट जोड़ें</button>
+            </div>
+          </form>
+        </div>
+      </article>
+
+      <!-- REWARD PANEL -->
+      <article class="panel zone-reward" id="panel-reward" hidden>
+        <header class="panel-head">
+          <h3><svg class="ico"><use href="#illus-reward"/></svg> रिवॉर्ड / बोनस</h3>
+          <button class="icon-btn" data-close><svg class="ico"><use href="#i-x"/></svg></button>
+        </header>
+        <form id="reward-form" class="form">
+          <p class="muted">
+            रिवॉर्ड predefined नियमों के अंतर्गत जारी होते हैं (अधिकतम ₹100/दिन, ठंडा
+            अवधि 60 सेकंड)।
+          </p>
+          <label>
+            <span>रिवॉर्ड प्रकार</span>
+            <select id="rw-type">
+              <option value="daily_login">दैनिक लॉगिन</option>
+              <option value="referral">रेफरल बोनस</option>
+              <option value="promo">प्रोमो कोड</option>
+            </select>
+          </label>
+          <label>
+            <span>राशि (₹, अधिकतम 100)</span>
+            <input type="number" id="rw-amt" min="1" max="100" step="0.01" value="10" required />
+          </label>
+          <label>
+            <span>कारण</span>
+            <input type="text" id="rw-reason" maxlength="120" required />
+          </label>
+          <div class="form-foot">
+            <button type="submit" class="btn-primary">दावा करें</button>
+          </div>
+        </form>
+      </article>
+
+      <!-- HISTORY PANEL -->
+      <article class="panel wide zone-history" id="panel-history" hidden>
+        <header class="panel-head">
+          <h3><svg class="ico"><use href="#illus-history"/></svg> लेन-देन इतिहास</h3>
+          <div class="head-right">
+            <select id="filter-type" class="mini">
+              <option value="">सभी प्रकार</option>
+              <option value="send">भेजें</option>
+              <option value="receive">प्राप्त</option>
+              <option value="reward">रिवॉर्ड</option>
+              <option value="reversal">रिवर्सल</option>
+            </select>
+            <button class="icon-btn" data-close><svg class="ico"><use href="#i-x"/></svg></button>
+          </div>
+        </header>
+        <div class="tx-list" id="tx-list">
+          <div class="empty">
+            <svg viewBox="0 0 200 160" style="width:160px;height:120px;margin-bottom:8px"><use href="#illus-empty"/></svg>
+            <div>अभी तक कोई लेन-देन नहीं।</div>
+          </div>
+        </div>
+        <div class="export-row">
+          <button class="btn-ghost" id="export-json">JSON निर्यात</button>
+          <button class="btn-ghost" id="export-csv">CSV निर्यात</button>
+          <button class="btn-danger" id="reset-data">डेटा रीसेट</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div>© 2026 वॉलेट — Frontend Demo (GitHub-Ready)</div>
+    <div class="foot-links"><a href="index.html">होम</a> · <a href="index.html#security">सुरक्षा</a></div>
+  </footer>
+
+  <script src="js/wallet-core.js"></script>
+  <script src="js/wallet.js"></script>
+</body>
+</html>
